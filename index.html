@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Importek</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <header class="topbar">
+    <h1>Dashboard Importek</h1>
+
+    <div class="filters">
+      <!-- Botón de tema a la izquierda del filtro de prioridad -->
+      <button id="toggleTheme">🌙/☀️</button>
+
+      <!-- FILTRO: Colaborador (opciones fijas) -->
+      <select id="filterAssignee">
+        <option value="">Colaborador: Todos</option>
+        <option>Zuri Duarte</option>
+        <option>Copiadoras</option>
+        <option>Administracion</option>
+        <option>Almacen</option>
+        <option>Telecom</option>
+      </select>
+
+      <!-- FILTRO: Categoría -->
+      <select id="filterCategory">
+        <option value="">Categoría: Todas</option>
+      </select>
+
+      <!-- FILTRO: Prioridad -->
+      <select id="filterPriority">
+        <option value="">Prioridad: Todas</option>
+        <option>Alta</option><option>Media</option><option>Baja</option>
+      </select>
+
+      <!-- FILTRO: Estado -->
+      <select id="filterStatus">
+        <option value="">Estado: Todos</option>
+        <option value="todo">Pendiente</option>
+        <option value="doing">En progreso</option>
+        <option value="done">Terminado</option>
+      </select>
+
+      <button id="clearFilters">Limpiar filtros</button>
+      <button id="notifyPerms" title="Activar notificaciones">🔕</button>
+    </div>
+  </header>
+
+  <!-- NUEVA TAREA -->
+  <section class="new-task">
+    <input id="title" placeholder="Título de la tarea" />
+    <input id="due" type="datetime-local" />
+
+    <select id="priority">
+      <option>Alta</option><option>Media</option><option>Baja</option>
+    </select>
+
+    <!-- Progreso -->
+    <select id="progress">
+      <option value="0">0%</option>
+      <option value="25">25%</option>
+      <option value="50">50%</option>
+      <option value="75">75%</option>
+      <option value="100">100%</option>
+    </select>
+
+    <!-- Colaborador (opciones fijas) -->
+    <select id="assignee">
+      <option value="">-- Selecciona colaborador --</option>
+      <option>Zuri Duarte</option>
+      <option>Copiadoras</option>
+      <option>Administracion</option>
+      <option>Almacen</option>
+      <option>Telecom</option>
+    </select>
+
+    <!-- Categoría con sugerencias -->
+    <input id="category" list="catOptions" placeholder="Categoría (ej. Mantenimiento)" />
+
+    <!-- Observaciones extra -->
+    <input id="extras" placeholder="Observaciones (Opcional)" />
+
+    <!-- Adjuntos (imágenes o archivos) -->
+    <input id="attachments" type="file" multiple />
+    <!-- Notas -->
+    <input id="notes" placeholder="Notas (Opcional)" />
+
+    <button id="addTask">+ Añadir</button>
+  </section>
+
+  <!-- TABLERO -->
+  <main class="board">
+    <div class="column" data-status="todo">
+      <div class="col-header">Pendiente</div>
+      <div class="dropzone" id="todo"></div>
+    </div>
+
+    <div class="column" data-status="doing">
+      <div class="col-header">En progreso</div>
+      <div class="dropzone" id="doing"></div>
+    </div>
+
+    <div class="column" data-status="done">
+      <div class="col-header">Terminado</div>
+      <div class="dropzone" id="done"></div>
+    </div>
+  </main>
+
+  <!-- EDITOR -->
+  <dialog id="editDialog">
+    <form method="dialog" class="modal">
+      <h3>Editar tarea</h3>
+
+      <input id="e_title" />
+      <input id="e_due" type="datetime-local" />
+
+      <select id="e_priority">
+        <option>Alta</option><option selected>Media</option><option>Baja</option>
+      </select>
+
+      <!-- Progreso -->
+      <select id="e_progress">
+        <option value="0">0%</option>
+        <option value="25">25%</option>
+        <option value="50">50%</option>
+        <option value="75">75%</option>
+        <option value="100">100%</option>
+      </select>
+
+      <!-- Colaborador (opciones fijas) -->
+      <select id="e_assignee">
+        <option value="">-- Selecciona colaborador --</option>
+        <option>Zuri Duarte</option>
+        <option>Copiadoras</option>
+        <option>Administracion</option>
+        <option>Almacen</option>
+        <option>Telecom</option>
+      </select>
+
+      <!-- Categoría con sugerencias -->
+      <input id="e_category" list="catOptions" placeholder="Categoría" />
+
+      <!-- Observaciones extra -->
+      <textarea id="e_extras" rows="3" placeholder="Observaciones/Notas extra"></textarea>
+
+      <!-- Galería + agregar adjuntos -->
+      <div id="e_gallery" class="gallery"></div>
+      <input id="e_attachments" type="file" multiple />
+
+      <!-- Notas -->
+      <textarea id="e_notes" rows="3" placeholder="Notas"></textarea>
+
+      <menu>
+        <button id="deleteBtn" type="button" title="Borrar">🗑️ Borrar</button>
+        <div class="spacer"></div>
+        <button value="cancel">Cancelar</button>
+        <button id="saveBtn" type="button">Guardar</button>
+      </menu>
+    </form>
+  </dialog>
+
+  <!-- Fuentes de sugerencias -->
+  <datalist id="catOptions"></datalist>
+  <!-- Eliminado: <datalist id="assigneeOptions"></datalist> -->
+
+  <footer class="foot">
+    © <span id="year"></span> Brayan Rivera. Guardado en servidor (tasks.json) + notificaciones push 5 minutos, 1 y 2 días antes.
+  </footer>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>
+

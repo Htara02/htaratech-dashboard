@@ -1,0 +1,413 @@
+:root{
+  --bg:#0f1115; --card:#171a21; --muted:#8b95a7; --text:#e8eefc;
+  --accent:#6aa2ff; --shadow:0 8px 24px rgba(0,0,0,.35);
+  --prio-alta:#ffb4b4; --prio-media:#ffe9a6; --prio-baja:#baf0c1;
+  --due-soon:#fff3a1; --overdue:#ffc7c7;
+  --border:#2f3545;
+}
+/* Modo claro: se activa con body.light-theme */
+.light-theme{
+  --bg:#f7f9fc;
+  --card:#ffffff;
+  --text:#0b1221;
+  --muted:#4b5565;
+  --accent:#0066ff;
+  --border:#e3e6ee;
+  --input-bg:#ffffff;
+  --card-border:#e6e9f2;
+
+  --prio-alta:#ff8b8b;
+  --prio-media:#ffe28a;
+  --prio-baja:#85e0a3;
+  --due-soon:#ffe38f;
+  --overdue:#ffc4c4;
+}
+
+/* ====== GLOBAL ====== */
+*{box-sizing:border-box}
+body{ margin:0; background:var(--bg); color:var(--text);
+  font:14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, sans-serif;}
+.topbar{ display:flex; align-items:center; justify-content:space-between;
+  padding:14px 18px; border-bottom:1px solid #232633; background:#0e1016;
+  position:sticky; top:0; z-index:10; }
+.topbar h1{ margin:0; font-size:18px; letter-spacing:.3px }
+.filters{display:flex; gap:8px; flex-wrap:wrap}
+
+/* Inputs generales */
+select, input, button, textarea{
+  background:#12151d; color:var(--text); border:1px solid #2a2f3b;
+  border-radius:10px; padding:8px 10px; outline:none;
+}
+button{ cursor:pointer } button:hover{ border-color:var(--accent) }
+
+/* ====== NUEVA TAREA ====== */
+.new-task{ display:grid; grid-template-columns: 1.2fr 0.7fr 0.5fr 1fr auto;
+  gap:8px; padding:14px 18px; border-bottom:1px solid #232633;}
+@media (max-width:900px){ .new-task{ grid-template-columns: 1fr 1fr; } }
+
+/* ====== TABLERO ====== */
+.board{ display:grid; gap:14px; padding:16px; grid-template-columns: repeat(3,1fr); }
+@media (max-width:1100px){ .board{ grid-template-columns:1fr; } }
+.column{ background:#0e1016; border:1px solid #232633; border-radius:16px;
+  box-shadow:var(--shadow); min-height:280px; display:flex; flex-direction:column;}
+.col-header{ padding:12px 14px; border-bottom:1px solid #232633; color:var(--muted);
+  font-weight:600; letter-spacing:.3px;}
+.dropzone{ padding:12px; display:flex; flex-direction:column; gap:10px; min-height:220px; }
+.dropzone.dragover{ outline:2px dashed var(--accent); outline-offset:6px; border-radius:16px; }
+
+/* ====== TARJETAS ====== */
+.card{ background:var(--card); border:1px solid #253041; border-radius:16px;
+  padding:12px; display:grid; gap:8px; box-shadow:var(--shadow); }
+.card .title{ font-weight:700; }
+.meta{ display:flex; gap:8px; flex-wrap:wrap; color:#c8d3f5; }
+.badge{ padding:2px 8px; border-radius:999px; font-size:12px; border:1px solid #2a2f3b; }
+.badge.alta{ background:var(--prio-alta); color:#430000 }
+.badge.media{ background:var(--prio-media); color:#3a2a00 }
+.badge.baja{ background:var(--prio-baja); color:#00320e }
+.badge.overdue{ background:var(--overdue); color:#4a0000; border:none }
+.badge.soon{ background:var(--due-soon); color:#3a2a00; border:none }
+.card .notes{ color:var(--muted); white-space:pre-wrap }
+.card .actions{ display:flex; gap:8px; justify-content:flex-end }
+.card .actions button{ font-size:12px; padding:6px 8px }
+
+/* ====== GALERÍA DE ARCHIVOS ====== */
+.gallery{ display:flex; gap:10px; flex-wrap:wrap; }
+.thumb {
+  width:114px; height:114px; /* 👈 3x más grande */
+  border-radius:10px;
+  overflow:hidden;
+  border:1px solid var(--border);
+  background:#0f1118;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  position:relative;
+}
+.thumb img{ width:100%; height:100%; object-fit:cover; }
+.thumb .remove {
+  position: absolute;
+  top: 4px;   /* antes -6px */
+  right: 4px; /* antes -6px */
+  background: #d9534f;
+  border: none;
+  color: white;
+  font-size: 14px;        /* un poquito más grande */
+  border-radius: 50%;     /* círculo perfecto */
+  width: 22px;            /* más grande */
+  height: 22px;
+  cursor: pointer;
+  line-height: 22px;      /* centra la "x" verticalmente */
+  text-align: center;     /* centra horizontalmente */
+  padding: 0;
+}
+
+.thumb a{ display:block; width:100%; height:100%; text-align:center; color:var(--text); text-decoration:none; }
+.thumb .filechip{ font-size:32px; display:block; margin-top:8px; }
+.thumb .filename{ display:block; font-size:11px; padding:2px; word-break:break-word; }
+
+/* ====== MODAL ====== */
+dialog::backdrop{ background:rgba(0,0,0,.45) }
+dialog .modal {
+  background: var(--card);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  border: 1px solid var(--border);
+  display:grid; gap:8px; min-width:300px;
+}
+dialog h3 { margin: 0 0 12px; font-size: 18px; font-weight: bold; color: var(--accent); }
+
+dialog input,
+dialog select,
+dialog textarea {
+  width: 100%;
+  background: #1a1d27;
+  border: 1px solid #2f3545;
+  color: var(--text);
+  border-radius: 8px;
+  padding: 10px;
+  transition: border 0.2s, background 0.2s;
+}
+dialog input:focus,
+dialog select:focus,
+dialog textarea:focus {
+  border-color: var(--accent);
+  background: #222736;
+  outline: none;
+}
+
+/* ====== BOTONES DEL MODAL ====== */
+dialog menu { display:flex; gap:8px; align-items:center }
+.spacer{ flex:1 }
+dialog menu button {
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.1s;
+}
+#saveBtn { background: var(--accent); color: white; }
+#saveBtn:hover { background: #4a8fff; transform: translateY(-1px); }
+dialog menu button[value="cancel"] { background: #444b5c; color: #f1f1f1; }
+dialog menu button[value="cancel"]:hover { background: #555e72; }
+#deleteBtn { background: #d9534f; color: white; }
+#deleteBtn:hover { background: #c9302c; transform: translateY(-1px); }
+
+/* ====== FOOTER ====== */
+.foot{ color:var(--muted); padding:10px 16px; border-top:1px solid #232633 }
+
+/* ====== ICONO DEL CALENDARIO ====== */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+  filter: invert(1); cursor: pointer;
+}
+/* === Overrides para que el tema cambie correctamente === */
+.topbar{
+  background: var(--card) !important;
+  border-bottom: 1px solid var(--border) !important;
+}
+select, input, button, textarea{
+  background: var(--input-bg) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+}
+.column{
+  background: var(--card) !important;
+  border: 1px solid var(--border) !important;
+}
+.col-header{
+  border-bottom: 1px solid var(--border) !important;
+  color: var(--muted) !important;
+}
+.card{
+  background: var(--card) !important;
+  border: 1px solid var(--card-border) !important;
+  color: var(--text) !important;
+}
+.dropzone.dragover{ outline-color: var(--accent) !important; }
+.foot{ border-top: 1px solid var(--border) !important; }
+
+/* Icono del calendario: blanco en oscuro, negro en claro */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="datetime-local"]::-webkit-calendar-picker-indicator{ filter: invert(1); }
+.light-theme input[type="date"]::-webkit-calendar-picker-indicator,
+.light-theme input[type="datetime-local"]::-webkit-calendar-picker-indicator{ filter: invert(0); }
+/* ===== Botones bonitos dentro del modal (Editar) ===== */
+dialog menu {
+  display:flex; gap:10px; align-items:center;
+}
+dialog menu button{
+  position:relative;
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px;
+  padding:10px 16px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,.04));
+  color: var(--text);
+  font-weight:700;
+  cursor:pointer;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.06);
+  transition: transform .06s ease, background .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+dialog menu button:hover{
+  background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,.06));
+  border-color: var(--accent);
+  box-shadow:
+    0 8px 18px rgba(0,0,0,.32),
+    inset 0 1px 0 rgba(255,255,255,.08);
+}
+dialog menu button:active{
+  transform: translateY(1px);
+}
+
+/* Guardar (primario) */
+#saveBtn{
+  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 86%, #000 0%), color-mix(in oklab, var(--accent) 72%, #000 12%));
+  border-color: color-mix(in oklab, var(--accent) 70%, #000 30%);
+  color:#fff;
+}
+#saveBtn:hover{
+  background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 92%, #000 0%), color-mix(in oklab, var(--accent) 78%, #000 12%));
+}
+#saveBtn::before{
+  content:"💾";
+  font-size:1em;
+}
+
+/* Cancelar (neutral) */
+dialog menu button[value="cancel"] {
+  background: linear-gradient(180deg, #6c757d, #5a6268); /* gris neutro */
+  border-color: #4e555b;
+  color: #fff;
+}
+dialog menu button[value="cancel"]:hover {
+  background: linear-gradient(180deg, #7d868d, #656d73); /* un poco más claro al pasar el mouse */
+  border-color: #545b62;
+}
+.light-theme dialog menu button[value="cancel"] {
+  background: linear-gradient(180deg, #e0e0e0, #cfcfcf);
+  border-color: #b5b5b5;
+  color: #222;
+}
+.light-theme dialog menu button[value="cancel"]:hover {
+  background: linear-gradient(180deg, #ededed, #dcdcdc);
+}
+
+.light-theme dialog menu button[value="cancel"]{
+  background: linear-gradient(180deg, #e6eaf1, #dfe4ec);
+  border-color:#cfd6e2;
+  color:#0b1221;
+}
+dialog menu button[value="cancel"]:hover{
+  border-color: var(--accent);
+}
+dialog menu button[value="cancel"]::before{
+  content:"↩️";
+  font-size:1em;
+}
+
+/* Botones ocupan su tamaño sin encogerse en pantallas chicas */
+dialog menu button { min-width: 120px; text-align:center; }
+
+/* Ajuste del circulito rojo de eliminar en miniaturas (por si no lo pegaste antes) */
+.thumb .remove{
+  position:absolute; top:4px; right:4px;
+  background:#d9534f; border:none; color:#fff;
+  font-size:14px; border-radius:50%;
+  width:22px; height:22px; line-height:22px; text-align:center;
+  cursor:pointer; padding:0;
+}
+/* === Botón Borrar en rojo vivo === */
+#deleteBtn {
+  background: #ff2b2b !important;   /* rojo brillante */
+  border: 1px solid #cc0000 !important;
+  color: #fff !important;
+  font-weight: 700;
+}
+#deleteBtn:hover {
+  background: #ff4444 !important;   /* más claro al pasar el mouse */
+  border-color: #b30000 !important;
+}
+#deleteBtn:active {
+  background: #cc0000 !important;   /* más oscuro al hacer click */
+}
+/* Opciones dentro de los select (menú desplegable) */
+select option {
+  background-color: var(--card);  /* fondo acorde al tema */
+  color: var(--text);             /* texto visible */
+}
+
+/* Para modo claro */
+.light-theme select option {
+  background-color: #ffffff;
+  color: #0b1221;
+}
+/* Ajuste de badges (para mejor contraste en modo claro) */
+.badge {
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+}
+
+/* Modo claro: colores más fuertes */
+.light-theme .badge {
+  background: #f0f2f8;
+  color: #0b1221;
+  border: 1px solid #cfd6e2;
+}
+
+/* Badges de prioridad en modo claro */
+.light-theme .badge.alta   { background:#ff8b8b; color:#4a0000; border:none; }
+.light-theme .badge.media  { background:#ffd966; color:#3a2a00; border:none; }
+.light-theme .badge.baja   { background:#7ee48f; color:#00320e; border:none; }
+
+/* Badges de estado especial en modo claro */
+.light-theme .badge.overdue { background:#ffb2b2; color:#4a0000; border:none; }
+.light-theme .badge.soon    { background:#ffe38f; color:#3a2a00; border:none; }
+/* === Forzar CANCELAR a gris neutro (por encima de reglas globales) === */
+dialog .modal menu button[value="cancel"]{
+  background: linear-gradient(180deg, #6c757d, #5a6268) !important; /* gris */
+  border-color: #4e555b !important;
+  color: #ffffff !important;
+  box-shadow:
+    0 6px 14px rgba(0,0,0,.25),
+    inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+dialog .modal menu button[value="cancel"]:hover{
+  background: linear-gradient(180deg, #7d868d, #656d73) !important;
+  border-color: #545b62 !important;
+}
+dialog .modal menu button[value="cancel"]:active{
+  transform: translateY(1px) !important;
+}
+
+/* Modo claro: gris claro con texto oscuro */
+.light-theme dialog .modal menu button[value="cancel"]{
+  background: linear-gradient(180deg, #e0e0e0, #cfcfcf) !important;
+  border-color: #b5b5b5 !important;
+  color: #222 !important;
+}
+.light-theme dialog .modal menu button[value="cancel"]:hover{
+  background: linear-gradient(180deg, #ededed, #dcdcdc) !important;
+}
+/* Botón + Añadir destacado */
+#addTask {
+  background: var(--accent) !important;  /* azul de tu tema */
+  color: #fff !important;
+  font-weight: 700;
+  border: none !important;
+  border-radius: 10px;
+  padding: 10px 16px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+#addTask:hover {
+  background: #4a8fff !important;  /* azul más claro */
+  transform: translateY(-2px);
+}
+
+#addTask:active {
+  background: #0052cc !important;  /* azul más oscuro */
+  transform: translateY(1px);
+}
+
+
+
+/* === Tipografía global unificada === */
+body, h1, h2, h3, h4, h5, h6,
+select, input, button, textarea,
+.col-header, .card, .card .notes, .badge {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif !important;
+  font-weight: 500; /* peso uniforme */
+  letter-spacing: 0.2px;
+  line-height: 1.4;
+  color: var(--text);
+}
+
+/* Ajustes específicos para consistencia */
+h1 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+}
+
+.col-header {
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.card .notes {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--muted) !important;
+}
+
+.badge {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}

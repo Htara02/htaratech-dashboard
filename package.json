@@ -1,0 +1,15 @@
+{
+  "name": "htaratech-dashboard",
+  "version": "1.0.0",
+  "description": "Dashboard de Htaratech con notificaciones push y gestor de tareas",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "web-push": "^3.6.0",
+    "node-cron": "^3.0.2"
+  },
+  "type": "module"
+}
